@@ -1,10 +1,13 @@
-name: GH-Pages
+name: Docs
 on:
   push:
     branches:
       - master
     tags:
       - "**"
+    paths:                                                                     
+       - '/*'         # Trigger on changes in the root directory
+       - 'prysk/**'   # Trigger on changes in the prysk directory and its subdirectories
   workflow_call:
 
 jobs:
@@ -18,18 +21,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: ./.github/actions/python-environment
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: ./.github/actions/rye
+        with:
+          python-version: ${{ matrix.python-version }}
 
       - name: Build Documentation
+        working-directory: prysk
         run: |
-          poetry run nox -s docs
+          rye sync
+          rye run nox -s docs
           touch docs/_build/.nojekyll
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4.6.0
         with:
           branch: github-pages
-          folder: ./docs/_build
+          folder: prysk/docs/_build
           git-config-name: Nicola Coretti
           git-config-email: nico.coretti@gmail.com

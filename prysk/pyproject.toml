@@ -1,0 +1,108 @@
+[project]
+name = "prysk"
+version = "0.20.0"
+description = "Functional tests for command line applications"
+readme = "README.rst"
+authors = [
+    {name="Nicola Coretti", email="nico.coretti@gmail.com"},
+    {name="Brodie Rao", email="brodie@bitheap.org"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Unix Shell",
+    "Topic :: Software Development :: Testing",
+    "Framework :: Pytest",
+]
+keywords = [
+    "test framework",
+    "snapshot testing",
+    "testing",
+    "cli",
+    "functional tests",
+]
+
+
+requires-python = ">=3.8,<4"
+
+dependencies = [
+    "rich~=13.3.1",
+]
+
+[project.urls]
+Homepage = "https://www.prysk.net/"
+Repository = "https://github.com/prysk/prysk"
+Issues = "https://github.com/prysk/prysk/issues"
+
+[project.optional-dependencies]
+pytest-plugin = ["pytest-prysk>=0.2.0"]
+
+[project.scripts]
+prysk = "prysk:main"
+
+[tool.rye]
+dev-dependencies = [
+    "tomli>=2.0.1",
+    "tomli-w>=1.0.0",
+    "pytest>=7.0.1",
+    "sphinx-copybutton>=0.5.0",
+    "check-manifest>=0.49",
+    "black>=23.00.0",
+    "coverage>=6.4",
+    "isort~=5.10.1",
+    "pylint>=2.13.9",
+    "Sphinx>=5.3.0",
+    "furo>=2023.3.27",
+    "nox>=2023.4.22",
+    "pre-commit~=2.19.0",
+    "mypy>=0.9",
+    "sphinx-multiversion>=0.2.4",
+    "pytest-xdist[psutil]>=3.2"
+]
+
+
+[tool.coverage.run]
+source = [
+    "prysk",
+    "pytest_prysk",
+]
+disable_warnings = [
+    "module-not-imported",
+]
+
+[tool.pylint.master]
+fail-under = 8
+
+[tool.pylint.format]
+max-line-length = 88
+max-module-lines = 800
+
+[tool.pylint.message_control]
+disable = "C0330, C0326,E1101"
+
+[tool.black]
+line-length = 88
+verbose = false
+include = "\\.pyi?$"
+
+[tool.isort]
+profile = "black"
+force_grid_wrap = 2
+
+[tool.mypy]
+files = [
+    "noxfile.py",
+    "scripts/**/*.py",
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra -q --strict-config --ignore=examples"
+testpaths = [
+    "test",
+]
